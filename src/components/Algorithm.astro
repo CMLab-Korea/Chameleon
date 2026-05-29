@@ -1,0 +1,250 @@
+---
+// Algorithm.astro - Method section
+
+const basePath = import.meta.env.BASE_URL;
+---
+
+<section id="method" class="content-section alt-background">
+  <div class="section-container">
+    <h2 class="section-title">Method</h2>
+
+    <!-- Framework -->
+    <div class="method-block">
+      <div class="method-block-header">
+        <span class="method-tag">Dataset Pipeline</span>
+        <h3>Reverse Dataset Construction Pipeline</h3>
+      </div>
+      <div class="method-block-body">
+        <p class="diag-lead">Prior approaches adopt a <i>forward data generation pipeline</i> that constructs the supervision target from synthetic generations, yielding an <i style="color:#c0392b;">inherently suboptimal</i> mapping regardless of model capacity. Our <em>reverse pipeline</em> inverts this construction process, starting from curated real stylized composite images <em>I<sub>c</sub></em> as ground-truth to ensure <em>faithful, artifact-free</em> supervision.</p>
+
+        <!-- Method overview figure -->
+        <div class="framework-figure">
+          <img src={`${basePath}assets/method/1.png`} alt="Method overview" class="paper-fig" />
+          <p class="fig-caption"><strong>Figure 3.</strong> Five-stage <strong>reverse</strong> construction pipeline <strong>starting from</strong> real stylized composites <em>I<sub>c</sub></em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagnosis -->
+    <div class="method-block">
+      <div class="method-block-header">
+        <span class="method-tag">Stage 1</span>
+        <h3>ChameleonEncoder</h3>
+      </div>
+      <div class="method-block-body">
+        <p class="diag-lead">Two heads (<i>style</i> and <i>content</i>) on a shared DINOv3 backbone are trained with the <em>Joint Hard Contrastive Learning (JHCL)</em> loss to <em>disentangle</em> <i>style</i> and <i>content</i> embeddings.</p>
+
+        <!-- ChameleonEncoder figure -->
+        <div class="framework-figure">
+          <img src={`${basePath}assets/method/2.png`} alt="ChameleonEncoder overview" class="paper-fig" />
+          <p class="fig-caption"><strong>Figure 4.</strong> ChameleonEncoder training via <strong>Joint Hard Contrastive Learning (JHCL)</strong>.</p>
+        </div>
+
+        <!-- t-SNE style separability -->
+        <div class="framework-figure fig-compact">
+          <img src={`${basePath}assets/method/3.png`} alt="t-SNE style separability — Naive DINO, HCL, JHCL" class="paper-fig" />
+          <p class="fig-caption"><strong>Figure 5.</strong> Encoder embeddings visualization (t-SNE, 8 styles). Naive DINO and HCL yield entangled representations, while <strong>JHCL</strong> produces disentangled style clusters.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Cross-Domain Compositing Model -->
+    <div class="method-block">
+      <div class="method-block-header">
+        <span class="method-tag">Stage 2</span>
+        <h3>Cross-Domain Compositing Model</h3>
+      </div>
+      <div class="method-block-body">
+        <p class="diag-lead">Our framework injects disentangled content and style tokens from <em>ChameleonEncoder</em> (Stage 1) into a DiT backbone. Our key contribution is <em>Spatio-Temporal Attention Gating (STAG)</em>, which adaptively regulates style injection across both <i>spatial</i> and <i>temporal (diffusion timestep)</i> axes for effective cross-domain compositing.</p>
+
+        <!-- Stage 2 figure -->
+        <div class="framework-figure">
+          <img src={`${basePath}assets/method/4.png`} alt="Cross-Domain Compositing Model overview" class="paper-fig" />
+          <p class="fig-caption"><strong>Figure 6.</strong> Stage 2 cross-domain compositing model. Content and style tokens from <strong>ChameleonEncoder</strong> are injected into a DiT, with style tokens regulated by <strong>STAG</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style is:global>
+  /* === Method blocks === */
+  .method-block {
+    background: white;
+    border-radius: 14px;
+    padding: 1.5rem 2.5rem 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    border-left: 5px solid #1F5E36;
+    transition: box-shadow 0.2s ease;
+  }
+  .method-block:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.11); }
+  .method-block.intervention {
+    border-left-color: #1a7a4a;
+    background: linear-gradient(135deg, #f0fff8 0%, #fff 100%);
+  }
+  .method-block-header {
+    display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem;
+  }
+  .method-tag {
+    background: #1F5E36; color: white; font-size: 0.72rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
+    letter-spacing: 0.05em; white-space: nowrap;
+  }
+  .intervention-tag { background: #1a7a4a; }
+  .method-block-header h3 { margin: 0; font-size: 1.3rem; color: #0E3A1F; font-weight: 700; }
+  .method-block-body { color: #444; line-height: 1.7; }
+  .method-block-body p { margin-bottom: 0.8rem; }
+
+  /* === Equation box === */
+  .equation-box {
+    background: #EFF8EA; border: 1px solid #c0c8f0; border-radius: 10px;
+    padding: 0.9rem 1.5rem; font-family: 'Georgia', serif; font-size: 1.15rem;
+    font-style: italic; text-align: center; margin: 0.5rem 0; color: #1F5E36;
+    overflow: visible; position: relative;
+  }
+
+  .eq-intro {
+    font-size: 0.9rem; color: #666; margin-bottom: 0.3rem;
+  }
+  .math-var {
+    font-family: 'Georgia', serif; color: #444;
+  }
+
+  /* Notation: hover tooltip on equation terms */
+  .notation {
+    position: relative; cursor: help;
+    border-bottom: 1px dashed #8890c0; padding-bottom: 1px;
+  }
+  .notation:hover::after {
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 10px); left: 50%;
+    transform: translateX(-50%); background: #0E3A1F; color: white;
+    padding: 8px 12px; border-radius: 8px; font-size: 0.82rem;
+    font-style: normal; font-weight: 400; font-family: 'Inter', sans-serif;
+    line-height: 1.45; white-space: normal; width: max-content;
+    max-width: 280px; z-index: 100; pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  }
+  .notation:hover::before {
+    content: ''; position: absolute; bottom: calc(100% + 4px);
+    left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #0E3A1F;
+    z-index: 100; pointer-events: none;
+  }
+
+  /* Color underlines override the default dashed */
+  .elt-mi { border-bottom: 2px solid #4a5ec0; }
+  .elt-cond { border-bottom: 2px solid #d08520; }
+  .elt-signal { border-bottom: 2px solid #2e7d32; }
+  .elt-noise { border-bottom: 2px solid #e65100; }
+
+  /* === Framework figure === */
+  .framework-figure { margin-top: 1.2rem; }
+  .framework-figure .paper-fig {
+    border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .framework-figure.fig-compact {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .fig-caption {
+    font-size: 0.88rem; color: #666; line-height: 1.55;
+    margin-top: 0.7rem; text-align: center;
+  }
+  .fig-caption strong { color: #1F5E36; }
+  .diag-lead em { color: #1F5E36; font-weight: 600; font-style: normal; }
+  .diag-lead i { color: inherit; font-style: italic; }
+  .qname-collapse { color: #e65100; }
+
+  /* === Diagnosis: matrix comparison === */
+  .diag-lead {
+    font-size: 0.93rem; margin-bottom: 1rem;
+  }
+  .matrix-compare {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.2rem; margin: 0.5rem 0;
+  }
+  @media (max-width: 600px) { .matrix-compare { grid-template-columns: 1fr; } }
+
+  .matrix-panel {
+    text-align: center;
+  }
+  .matrix-label {
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 0.5rem;
+  }
+  .matrix-label-good { color: #2e7d32; }
+  .matrix-label-bad { color: #e65100; }
+
+  .score-matrix {
+    width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  }
+  .score-matrix th {
+    font-weight: 400; color: #666; padding: 6px 8px;
+    font-style: italic; font-family: 'Georgia', serif;
+  }
+  .score-matrix thead th {
+    border-bottom: 2px solid #e0e0e0;
+  }
+  .score-matrix tbody th {
+    text-align: right; border-right: 2px solid #e0e0e0;
+  }
+  .score-matrix td {
+    padding: 8px 10px; text-align: center; border-radius: 4px;
+  }
+  .score-matrix .hi {
+    background: #c8e6c9; color: #1b5e20; font-weight: 700;
+  }
+  .score-matrix .lo {
+    background: #f5f5f5; color: #aaa;
+  }
+  .score-matrix .mid {
+    background: #fff3e0; color: #bf6c00;
+  }
+
+  .matrix-verdict {
+    font-size: 0.78rem; margin-top: 0.5rem; font-weight: 600;
+    padding: 4px 8px; border-radius: 6px; display: inline-block;
+  }
+  .matrix-verdict.good { background: #e8f5e9; color: #2e7d32; }
+  .matrix-verdict.bad { background: #fff3e0; color: #e65100; }
+
+  /* === SNR cards === */
+  .snr-cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.8rem; margin: 0.8rem 0; font-size: 0.9rem; line-height: 1.55;
+  }
+  @media (max-width: 600px) { .snr-cards { grid-template-columns: 1fr; } }
+  .snr-card { padding: 1rem; border-radius: 10px; }
+  .snr-signal { background: #e8f5e9; border: 1px solid #a5d6a7; }
+  .snr-noise { background: #fff3e0; border: 1px solid #ffcc80; }
+  .snr-punchline {
+    font-size: 0.9rem; color: #e65100; text-align: center;
+    padding: 0.6rem 1rem; background: #fff8f0;
+    border-radius: 8px; border: 1px solid #ffe0b2; margin-top: 0.3rem;
+  }
+
+  /* === Figures === */
+  .paper-fig { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .fig-mechanism { margin-bottom: 1rem; max-width: 860px; margin-left: auto; margin-right: auto; }
+  .rv-filter-fig-wrap { margin-top: 1.2rem; overflow-x: auto; }
+  .fig-rv-filter { min-width: 600px; width: 100%; }
+
+  /* === Intervention === */
+  .intervention-steps { margin: 0.5rem 0 0.8rem 1.2rem; line-height: 1.7; font-size: 0.93rem; }
+  .intervention-steps li { margin-bottom: 0.3rem; }
+  .compat-note {
+    background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px;
+    padding: 0.5rem 1rem; font-size: 0.85rem; color: #2e7d32; font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .method-block { padding: 1.5rem; }
+    .equation-box { font-size: 1rem; padding: 0.7rem 1rem; }
+    .eq-legend { grid-template-columns: 1fr; }
+  }
+</style>

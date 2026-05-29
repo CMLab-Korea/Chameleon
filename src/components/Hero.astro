@@ -1,0 +1,204 @@
+---
+// Hero.astro - Teaser section with project overview
+const basePath = import.meta.env.BASE_URL;
+---
+<section id="hero" class="content-section hero-section">
+  <div class="title-wrapper">
+    <div class="title-with-logo">
+      <img src={`${basePath}assets/logos/icon.png`} alt="Project logo" class="title-logo">
+      <h1 class="main-title" id="animated-title">Chameleon</h1>
+    </div>
+    <p class="title-subtitle">
+      <span class="nowrap">Style-Content Disentangled Framework for</span>
+      <span class="nowrap">Cross-Domain Object Compositing</span>
+    </p>
+    <p class="venue-badge">arXiv 2026</p>
+  </div>
+
+  <p class="main-subtitle">
+    The first large-scale dataset, benchmark, and two-stage framework for cross-domain compositing,
+    preserving foreground identity while enabling realistic stylization through
+    style&ndash;content disentanglement and adaptive style injection.
+  </p>
+
+  <div class="authors-section compact">
+    <div class="authors-list">
+      <p class="author-line">
+        <a href="#">Sukhun Ko</a><sup>1</sup>,
+        <a href="https://sites.google.com/view/sooyekim" target="_blank" rel="noopener noreferrer">Soo Ye Kim</a><sup>&dagger;2</sup>,
+        <a href="https://sites.google.com/view/ozbro/" target="_blank" rel="noopener noreferrer">Jihyong Oh</a><sup>&dagger;1</sup>
+      </p>
+      <p class="equal-contribution">
+        <sup>&dagger;</sup> Co-corresponding authors
+      </p>
+      <p class="affiliations">
+        <sup>1</sup><a class="aff aff-cmlab" href="https://cmlab.cau.ac.kr/cmlab" target="_blank" rel="noopener noreferrer">CMLab, Chung-Ang University</a>
+        &nbsp;&nbsp;
+        <sup>2</sup><a class="aff aff-adobe" href="https://research.adobe.com/" target="_blank" rel="noopener noreferrer">Adobe Research</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="resources-section">
+    <div class="resources-buttons">
+      <a href="#" class="cta-button" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="button-icon" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+        <span class="button-text">Code</span>
+      </a>
+      <a href="#" class="resource-button" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="resource-icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <span>Paper</span>
+      </a>
+      <a href="#" class="resource-button" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-database resource-icon"></i>
+        <span>Data</span>
+      </a>
+      <a href="#" class="resource-button" target="_blank" rel="noopener noreferrer">
+        <span class="resource-icon hf-emoji" aria-hidden="true">🤗</span>
+        <span>Demo</span>
+      </a>
+      <a href="#" class="resource-button" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-youtube resource-icon"></i>
+        <span>Video</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const titleElement = document.getElementById('animated-title');
+    const subtitleElement = document.querySelector('.title-subtitle');
+
+    if (titleElement) {
+      const text = titleElement.textContent || '';
+      titleElement.innerHTML = '';
+      text.split('').forEach((char, index) => {
+        const span = document.createElement('span');
+        span.textContent = char === ' ' ? ' ' : char;
+        span.className = 'reveal-char';
+        (span as HTMLElement).style.animationDelay = `${index * 0.05}s`;
+        titleElement.appendChild(span);
+      });
+    }
+
+    if (subtitleElement) {
+      // Iterate children so <span class="nowrap"> groups stay intact
+      let charIndex = 0;
+      const animateText = (txt: string, parent: HTMLElement) => {
+        [...txt].forEach((ch) => {
+          const span = document.createElement('span');
+          span.textContent = ch === ' ' ? ' ' : ch;
+          span.className = 'reveal-char-subtitle';
+          (span as HTMLElement).style.animationDelay = `${0.8 + charIndex * 0.02}s`;
+          parent.appendChild(span);
+          charIndex++;
+        });
+      };
+      const originalNodes = [...subtitleElement.childNodes];
+      subtitleElement.innerHTML = '';
+      originalNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          animateText(node.textContent || '', subtitleElement as HTMLElement);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node as HTMLElement;
+          const wrapper = document.createElement('span');
+          wrapper.className = el.className;   // preserves "nowrap"
+          animateText(el.textContent || '', wrapper);
+          subtitleElement.appendChild(wrapper);
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .venue-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: transparent;
+    color: #c0392b;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    letter-spacing: 0.05em;
+  }
+
+  .main-subtitle {
+    max-width: 860px;
+    margin: 16px auto 0.8rem;
+    color: #444;
+    font-size: 19px;
+    line-height: 1.7;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .authors-section.compact {
+    margin-top: 1.4rem;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 22px;
+    background: linear-gradient(45deg, #1F5E36, #2F7D4A);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(31, 94, 54, 0.2);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(31, 94, 54, 0.3);
+    text-decoration: none;
+    color: white;
+  }
+
+  .button-icon { width: 20px; height: 20px; fill: currentColor; }
+  .button-text { font-size: 1rem; font-weight: 600; color: white; }
+
+  .equal-contribution {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+  }
+
+  .resources-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Affiliation brand colors — clickable but no underline */
+  .authors-list a.aff {
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: none !important;
+    padding-bottom: 0;
+    transition: opacity 0.15s ease;
+  }
+  .authors-list a.aff:hover,
+  .authors-list a.aff:focus {
+    text-decoration: none;
+    border-bottom: none !important;
+    opacity: 0.7;
+  }
+  .authors-list a.aff-cmlab { color: #0d207f; }    /* CMLab navy */
+  .authors-list a.aff-adobe { color: #ED1C24; }    /* Adobe red — adjust hex if needed */
+</style>

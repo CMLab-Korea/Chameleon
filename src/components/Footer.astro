@@ -1,0 +1,30 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="simple-footer">
+    <p>Copyright © {year} — <a href="https://cmlab.cau.ac.kr/" target="_blank" rel="noopener noreferrer" class="lab-link">CMLab</a>. Template adapted from common academic project pages.</p>
+</footer>
+
+<style>
+  .simple-footer {
+    background-color: #ffffff;
+    padding: 1.5rem 1rem;
+    margin-top: 3rem;
+    text-align: center;
+    color: #333;
+    font-size: 0.875rem;
+    border-top: 1px solid #ccc;
+  }
+  .simple-footer p {
+    margin: 0.25rem 0;
+  }
+  .lab-link {
+    color: #0d207f;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .lab-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>
