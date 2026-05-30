@@ -32,9 +32,17 @@ const basePath = import.meta.env.BASE_URL;
         <sup>&dagger;</sup> Co-corresponding authors
       </p>
       <p class="affiliations">
-        <sup>1</sup><a class="aff aff-cmlab" href="https://cmlab.cau.ac.kr/cmlab" target="_blank" rel="noopener noreferrer">CMLab, Chung-Ang University</a>
+        <span class="aff-item">
+          <sup>1</sup>
+          <img class="aff-logo aff-logo-cmlab" src={`${basePath}assets/logos/cmlab.png`} alt="" aria-hidden="true">
+          <a class="aff aff-cmlab" href="https://cmlab.cau.ac.kr/cmlab" target="_blank" rel="noopener noreferrer">CMLab, Chung-Ang University</a>
+        </span>
         &nbsp;&nbsp;
-        <sup>2</sup><a class="aff aff-adobe" href="https://research.adobe.com/" target="_blank" rel="noopener noreferrer">Adobe Research</a>
+        <span class="aff-item">
+          <sup>2</sup>
+          <img class="aff-logo aff-logo-adobe" src={`${basePath}assets/logos/adobe.png`} alt="" aria-hidden="true">
+          <a class="aff aff-adobe" href="https://research.adobe.com/" target="_blank" rel="noopener noreferrer">Adobe Research</a>
+        </span>
       </p>
     </div>
   </div>
@@ -201,4 +209,19 @@ const basePath = import.meta.env.BASE_URL;
   }
   .authors-list a.aff-cmlab { color: #0d207f; }    /* CMLab navy */
   .authors-list a.aff-adobe { color: #ED1C24; }    /* Adobe red — adjust hex if needed */
+
+  /* Affiliation logos placed in front of each affiliation */
+  .aff-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .aff-item > sup { margin-right: 1px; }
+  .aff-logo {
+    height: 18px;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 5px 0 1px;
+  }
+  .aff-logo-adobe { height: 16px; }
 </style>
